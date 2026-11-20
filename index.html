@@ -35,7 +35,10 @@ body { background: var(--bg); color: var(--ink); font-family: var(--body); overf
 header { flex: 0 0 auto; padding-top: max(10px, env(safe-area-inset-top, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); border-bottom: 1px solid var(--line); }
 .brand { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .brand h1 { margin: 0; font-family: var(--display); font-weight: 650; font-size: 1.35rem; letter-spacing: -0.01em; }
-.count { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.count { margin-left: auto; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.refresh { align-self: center; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 500 1rem/1 var(--body); width: 34px; height: 30px; border-radius: 6px; cursor: pointer; }
+.refresh:disabled { opacity: 0.5; cursor: default; }
+.refresh:focus-visible { outline: 2px solid var(--space); outline-offset: 2px; }
 nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin-top: 6px; }
 nav::-webkit-scrollbar { display: none; }
 nav button { flex: 0 0 auto; border: 0; background: none; color: var(--muted); font: 500 0.9rem var(--body); padding: 8px 10px 10px; border-bottom: 2px solid transparent; cursor: pointer; }
@@ -361,7 +364,10 @@ function drawEnd(state, msg) {
 function observe() {
   if (io) io.disconnect();
   const n = visible().length;
-  io = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) setCount(+e.target.dataset.i, n); }, { root: feed, threshold: 0.6 });
+  const list = visible();
+  io = new IntersectionObserver(es => {
+    for (const e of es) if (e.isIntersecting) { const i = +e.target.dataset.i; setCount(i, n); if (list[i]) markSeen(list[i].id); }
+  }, { root: feed, threshold: 0.6 });
   feed.querySelectorAll(".card").forEach(c => io.observe(c));
   // Start loading quietly when the reader is two cards from the end.
   if (nearEnd) nearEnd.disconnect();
@@ -380,22 +386,31 @@ function render() {
   observe();
 }
 
-async function loadMore() {
-  if (loading) return;
-  loading = true; drawEnd("loading");
+// Interleave topics so the All tab alternates space / history / geography.
+function interleave(list, want) {
+  const byCat = {}; for (const c of list) (byCat[c.cat] = byCat[c.cat] || []).push(c);
+  const out = []; for (let added = true; added;) { added = false; for (const t of want) { const c = (byCat[t] || []).shift(); if (c) { out.push(c); added = true; } } }
+  return out;
+}
+
+// Fetch one batch of live cards for the current tab. Returns {cards, busy}; never touches the page.
+async function fetchBatch() {
   const want = topic === "all" ? ["space", "history", "geography"] : [topic];
   const per = topic === "all" ? PER_TOPIC : PER_SINGLE;
   const results = await Promise.allSettled(want.flatMap(t => SOURCES[t](per)));
-  const fresh = [], seenNow = new Set(items.map(c => c.id));
+  const fresh = [], have = new Set(items.map(c => c.id));
   let busy = false;
   for (const r of results) {
     if (r.status === "rejected") { if (String(r.reason && r.reason.message) === "busy") busy = true; continue; }
-    for (const c of r.value) if (c && c.h && c.t && !seenNow.has(c.id)) { seenNow.add(c.id); c.live = true; fresh.push(c); }
+    for (const c of r.value) if (c && c.h && c.t && !have.has(c.id)) { have.add(c.id); c.live = true; fresh.push(c); }
   }
-  // Interleave topics so the All tab alternates space / history / geography.
-  const byCat = {}; for (const c of shuffle(fresh)) (byCat[c.cat] = byCat[c.cat] || []).push(c);
-  const ordered = []; for (let added = true; added;) { added = false; for (const t of want) { const c = (byCat[t] || []).shift(); if (c) { ordered.push(c); added = true; } } }
+  return { cards: interleave(shuffle(fresh), want), busy };
+}
 
+async function loadMore() {
+  if (loading) return;
+  loading = true; drawEnd("loading");
+  const { cards: ordered, busy } = await fetchBatch();
   loading = false;
   if (!ordered.length) {
     drawEnd("error", navigator.onLine === false ? "You seem to be offline. Connect and try again."
@@ -403,7 +418,6 @@ async function loadMore() {
     return;
   }
   items.push(...ordered);
-  ordered.forEach(c => markSeen(c.id));
   const start = visible().length - ordered.length;
   const nodes = ordered.map((c, k) => card(c, start + k));
   endEl.before(...nodes);
@@ -421,8 +435,45 @@ document.addEventListener("keydown", e => {
   e.preventDefault(); feed.scrollBy({ top: (e.key === "ArrowDown" || e.key === "j" ? 1 : -1) * feed.clientHeight });
 });
 
-fetch("cards.json").then(r => r.json()).then(list => { items = list.map(fromStatic); render(); })
-  .catch(() => { items = []; render(); loadMore(); });
+/* ---------- start-up: fresh live cards first, then the hand-written ones shuffled ---------- */
+let staticCards = [];
+function shuffledStatic() {
+  // Unread hand-written cards first, already-read ones after; each group in random order.
+  const unread = shuffle(staticCards.filter(c => !seen.has(c.id))), read = shuffle(staticCards.filter(c => seen.has(c.id)));
+  return [...interleave(unread, ["space", "history", "geography"]), ...interleave(read, ["space", "history", "geography"])];
+}
+function showLoading() {
+  const s = el("section", "end"); s.append(el("div", "spin"), el("h2", null, "Getting today's stories…"));
+  feed.replaceChildren(s); count.textContent = "";
+}
+let refreshing = false;
+async function refresh() {
+  if (refreshing || loading) return;
+  refreshing = true; refreshBtn.disabled = true; showLoading();
+  items = [];
+  // Wait up to 5 s for live cards; if the sources are slow, show the shuffled cards and add live ones when they arrive.
+  const batch = fetchBatch().catch(() => ({ cards: [] }));
+  const first = await Promise.race([batch, new Promise(r => setTimeout(() => r(null), 5000))]);
+  items = [...(first ? first.cards : []), ...shuffledStatic()];
+  render();
+  if (!first) batch.then(({ cards }) => {
+    const add = cards.filter(c => !items.some(x => x.id === c.id));
+    if (!add.length) return;
+    items.push(...add);
+    const start = visible().length - add.filter(c => topic === "all" || c.cat === topic).length;
+    endEl.before(...add.filter(c => topic === "all" || c.cat === topic).map((c, k) => card(c, start + k)));
+    drawEnd("idle"); observe();
+  });
+  refreshing = false; refreshBtn.disabled = false;
+}
+
+const refreshBtn = el("button", "refresh", "↻");
+refreshBtn.setAttribute("aria-label", "New stories"); refreshBtn.title = "New stories";
+refreshBtn.onclick = refresh;
+document.querySelector(".brand").append(refreshBtn);
+
+fetch("cards.json").then(r => r.json()).then(list => { staticCards = list.map(fromStatic); })
+  .catch(() => { staticCards = []; }).then(refresh);
 </script>
 </body>
 </html>
