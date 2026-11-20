@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Orbit &amp; Atlas</title>
+<meta name="description" content="Short reads on space, history and geography, with more stories loaded live from NASA, USGS and Wikipedia.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151a25" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Orbit & Atlas">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='14' fill='%233a49c4'/%3E%3Cellipse cx='32' cy='32' rx='28' ry='9' fill='none' stroke='%231c7656' stroke-width='4' transform='rotate(-25 32 32)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one full-height column of snap-scrolling cards (image on top, short brief below), topic tabs pinned above.
+   The last panel loads more cards live from public APIs. */
+:root {
+  --bg: #eef0f5; --surface: #ffffff; --ink: #141824; --muted: #596174; --line: #dce0ea;
+  --space: #3a49c4; --history: #a3383c; --geo: #1c7656; --chip-ink: #ffffff;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0b0e15; --surface: #151a25; --ink: #e8ebf3; --muted: #9aa2b6; --line: #262d3d;
+  --space: #8d9bff; --history: #ff8f8c; --geo: #62d3a8; --chip-ink: #0b0e15; color-scheme: dark } }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); overflow: hidden; }
+.app { height: 100%; max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; background: var(--surface); }
+header { flex: 0 0 auto; padding-top: max(10px, env(safe-area-inset-top, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.brand h1 { margin: 0; font-family: var(--display); font-weight: 650; font-size: 1.35rem; letter-spacing: -0.01em; }
+.count { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin-top: 6px; }
+nav::-webkit-scrollbar { display: none; }
+nav button { flex: 0 0 auto; border: 0; background: none; color: var(--muted); font: 500 0.9rem var(--body); padding: 8px 10px 10px; border-bottom: 2px solid transparent; cursor: pointer; }
+nav button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent, var(--ink)); }
+nav button:focus-visible, a:focus-visible, .end button:focus-visible { outline: 2px solid var(--space); outline-offset: 2px; border-radius: 4px; }
+.feed { flex: 1 1 auto; min-height: 0; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; scrollbar-width: none; }
+.feed::-webkit-scrollbar { display: none; }
+.card { height: 100%; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; border-bottom: 1px solid var(--line); }
+.space { --accent: var(--space); } .history { --accent: var(--history); } .geography { --accent: var(--geo); }
+figure { position: relative; margin: 0; flex: 0 0 40%; min-height: 0; overflow: hidden;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--muted)) 35%, var(--surface)), color-mix(in srgb, var(--accent, var(--muted)) 10%, var(--surface))); }
+figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
+figure .big { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; font: 650 3.2rem/1 var(--display); color: var(--accent); }
+figure .big small { display: block; margin-top: 8px; font: 500 0.75rem var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+figcaption { position: absolute; right: 6px; bottom: 6px; max-width: calc(100% - 12px); font: 400 0.62rem/1.3 var(--body); color: #fff; background: rgba(0,0,0,0.55); padding: 3px 6px; border-radius: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.body { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-block: 14px 12px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.chip { background: var(--accent); color: var(--chip-ink); font: 600 0.66rem var(--body); text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 7px; border-radius: 3px; }
+.fact { font: 500 0.75rem var(--mono); color: var(--accent); font-variant-numeric: tabular-nums; }
+.live { font: 500 0.66rem var(--body); color: var(--muted); border: 1px solid var(--line); padding: 2px 6px; border-radius: 3px; }
+.card h2 { margin: 0; font-family: var(--display); font-weight: 650; font-size: 1.32rem; line-height: 1.2; text-wrap: balance; }
+.card p { margin: 0; font-size: 0.95rem; line-height: 1.55; color: var(--ink); }
+.src { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--muted); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.src .row { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.src a { color: var(--ink); font-weight: 500; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.src a:hover { text-decoration-color: var(--accent); }
+.src b { font-weight: 600; color: var(--muted); }
+.end { height: 100%; scroll-snap-align: start; display: grid; place-content: center; gap: 12px; text-align: center; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); color: var(--muted); }
+.end h2 { margin: 0; font-family: var(--display); color: var(--ink); font-size: 1.4rem; }
+.end .note { max-width: 32ch; margin: 0 auto; font-size: 0.85rem; line-height: 1.5; }
+.end .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.end button { border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 500 0.9rem var(--body); padding: 9px 16px; border-radius: 6px; cursor: pointer; }
+.end button.primary { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.end button:disabled { opacity: 0.6; cursor: default; }
+.spin { width: 22px; height: 22px; margin: 0 auto; border: 2px solid var(--line); border-top-color: var(--ink); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .feed { scroll-behavior: auto; } .spin { animation-duration: 2.4s; } }
+@media (min-width: 560px) { .app { border-left: 1px solid var(--line); border-right: 1px solid var(--line); } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><h1>Orbit &amp; Atlas</h1><span class="count" id="count" aria-live="polite"></span></div>
+    <nav role="tablist" aria-label="Topics" id="tabs"></nav>
+  </header>
+  <main class="feed" id="feed" tabindex="-1"></main>
+</div>
+
+<script>
+"use strict";
+/* ---------- settings ---------- */
+const TOPICS = [["all", "All"], ["space", "Space"], ["history", "History"], ["geography", "Geography"]];
+const PER_TOPIC = 3;               // new cards per topic per "Load more" (All tab gets 3 of each)
+const PER_SINGLE = 6;              // new cards per "Load more" on a single-topic tab
+const WEEK = 7 * 24 * 3600 * 1000;
+const WIKI_API = "https://en.wikipedia.org/w/api.php";
+const WIKI_HEADERS = { "Api-User-Agent": "OrbitAtlasReader/1.0 (personal reading page)" };
+// Wikipedia's curated "Vital articles" lists: its most important, most-watched articles per subject.
+const VITAL = {
+  space: ["Wikipedia:Vital articles/Level 5/Physical sciences/Astronomy"],
+  history: ["Wikipedia:Vital articles/Level 5/History"],
+  geography: ["Wikipedia:Vital articles/Level 5/Geography/Physical"],
+};
+// Used only if the Vital list can't be fetched.
+const FALLBACK = {
+  space: ["Pioneer 10", "New Horizons", "Halley's Comet", "Andromeda Galaxy", "Olympus Mons", "Europa (moon)", "Crab Nebula", "Kuiper belt", "Black hole", "Titan (moon)", "Great Red Spot", "Apollo 13"],
+  history: ["Fall of Constantinople", "French Revolution", "Battle of Hastings", "Treaty of Westphalia", "Meiji Restoration", "Black Death", "Indus Valley Civilisation", "Partition of India", "Moon landing", "Industrial Revolution", "Byzantine Empire", "Columbian exchange"],
+  geography: ["Mariana Trench", "Great Barrier Reef", "Atacama Desert", "Nile", "Lake Baikal", "Dead Sea", "Iguazu Falls", "Himalayas", "Grand Canyon", "Antarctica", "Ring of Fire", "Victoria Falls"],
+};
+const NASA_TERMS = ["Saturn", "Jupiter", "nebula", "galaxy", "Mars rover", "Apollo", "International Space Station", "comet", "Hubble", "Webb telescope", "aurora", "solar flare", "Pluto", "Cassini", "Voyager", "eclipse", "Moon", "spacewalk", "asteroid", "star cluster", "Earth from space", "Venus", "Mercury", "Gemini program", "space shuttle"];
+
+/* ---------- small helpers ---------- */
+const $ = id => document.getElementById(id);
+const feed = $("feed"), tabs = $("tabs"), count = $("count");
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+function el(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+function safeUrl(u) { try { const x = new URL(u); return x.protocol === "https:" ? x.href : null; } catch (e) { return null; } }
+function link(href, text) { const a = el("a", null, text); const u = safeUrl(href); if (u) { a.href = u; a.target = "_blank"; a.rel = "noopener"; } return a; }
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function stripTags(s) { return String(s || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\s+/g, " ").trim(); }
+// Keep whole sentences, roughly 40-75 words, like the hand-written cards.
+function brief(text, min = 40, max = 75) {
+  const clean = stripTags(text).replace(/\s*\([^()]*\)/g, "");
+  const parts = clean.match(/[^.!?]+[.!?]+(\s|$)/g) || [clean];
+  let out = "", n = 0;
+  for (const s of parts) {
+    const w = s.trim().split(/\s+/).length;
+    if (n >= min || (n > 0 && n + w > max)) break;
+    out += s; n += w;
+  }
+  out = out.trim();
+  if (!out) { const w = clean.split(/\s+/); out = w.slice(0, max).join(" ") + (w.length > max ? "…" : ""); }
+  return out;
+}
+const words = s => stripTags(s).split(/\s+/).filter(Boolean).length;
+const archive = q => "https://archive.org/search?query=" + encodeURIComponent(q);
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const fmtDate = d => d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+
+async function getJSON(url, opts = {}) {
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 15000);
+  try {
+    const r = await fetch(url, { ...opts, signal: ctl.signal });
+    if (!r.ok) throw new Error(r.status === 429 ? "busy" : "HTTP " + r.status);
+    return await r.json();
+  } finally { clearTimeout(t); }
+}
+const wikiQS = p => WIKI_API + "?" + new URLSearchParams({ format: "json", formatversion: "2", origin: "*", ...p });
+
+/* ---------- seen-tracking so live cards don't repeat between visits ---------- */
+let seen = new Set(store.get("oa-seen", []));
+function markSeen(id) { seen.add(id); const a = [...seen]; if (a.length > 3000) seen = new Set(a.slice(-2500)); store.set("oa-seen", [...seen]); }
+
+// Skip a headline already on screen (the NASA library has many photos with the same title).
+const titleTaken = h => items.some(c => c.h === h);
+// "On this day" sometimes picks crime stories; keep the feed to history, not true crime.
+const GRIM = /\b(corpse|mutilat\w*|serial killer|raped?|murdered|dismember\w*|decapitat\w*)\b/i;
+
+/* ---------- sources ---------- */
+// 1) NASA Image and Video Library: official NASA photos with NASA-written captions. No key needed.
+async function nasaCards(n) {
+  // One photo per search term, several terms fetched in parallel, so a batch isn't all "Space Shuttle".
+  const terms = shuffle(NASA_TERMS.slice()).slice(0, n + 1);
+  const pages = await Promise.allSettled(terms.map(q => getJSON("https://images-api.nasa.gov/search?" +
+    new URLSearchParams({ q, media_type: "image", page: 1 + Math.floor(Math.random() * 5) }))));
+  const out = [];
+  for (const r of pages) {
+    if (r.status !== "fulfilled" || out.length >= n) continue;
+    for (const it of shuffle((r.value.collection && r.value.collection.items) || [])) {
+      const x = it.data && it.data[0]; const thumb = it.links && it.links[0] && it.links[0].href;
+      if (!x || !thumb || seen.has("nasa:" + x.nasa_id) || words(x.description) < 25) continue;
+      const title = stripTags(x.title).replace(/^(PIA|iss|jsc|KSC|GRC|MSFC)[\w-]*\s*[:\-–]\s*/i, "");
+      if (title.length < 4 || /^[\w-]+\d{3,}$/.test(title) || titleTaken(title) || out.some(c => c.h === title)) continue;
+      const date = x.date_created ? fmtDate(new Date(x.date_created)) : "";
+      out.push({
+        id: "nasa:" + x.nasa_id, cat: "space", h: title, t: brief(x.description),
+        fact: [date, x.center].filter(Boolean).join(" · "),
+        img: thumb.replace(/~(small|thumb)\.jpg$/i, "~medium.jpg"), imgFallback: thumb, alt: title,
+        credit: "NASA" + (x.center ? " / " + x.center : "") + (x.secondary_creator ? " · " + stripTags(x.secondary_creator) : ""),
+        source: ["NASA Image Library", "https://images.nasa.gov/details/" + encodeURIComponent(x.nasa_id)],
+        more: [["Read more on Internet Archive", archive(title)]],
+      });
+      break;
+    }
+  }
+  if (!out.length && pages.every(r => r.status === "rejected")) throw pages[0].reason;
+  return out;
+}
+
+// 2) Wikipedia "Vital articles" for each topic, fetched once a week and kept on the phone.
+async function vitalTitles(topic) {
+  const key = "oa-vital-" + topic, cached = store.get(key, null);
+  if (cached && Date.now() - cached.at < WEEK && cached.titles.length > 50) return cached.titles;
+  const titles = [];
+  try {
+    for (const page of VITAL[topic]) {
+      let cont = {};
+      for (let i = 0; i < 12; i++) {               // each request returns up to 500 links
+        const d = await getJSON(wikiQS({ action: "query", redirects: "1", prop: "links", plnamespace: "0", pllimit: "max", titles: page, ...cont }), { headers: WIKI_HEADERS });
+        for (const p of d.query.pages) for (const l of p.links || []) titles.push(l.title);
+        if (!d.continue) break;
+        cont = { plcontinue: d.continue.plcontinue };
+      }
+    }
+  } catch (e) { if (cached) return cached.titles; }
+  const good = titles.filter(t => !/^(List|Lists|Outline|Index|Timeline|Glossary) of /.test(t) && !/^\d{1,4}s?( (BC|AD|BCE|CE))?$/.test(t));
+  if (good.length > 50) { store.set(key, { at: Date.now(), titles: good }); return good; }
+  return FALLBACK[topic];
+}
+
+async function wikiCards(topic, n) {
+  const pool = (await vitalTitles(topic)).filter(t => !seen.has("wiki:" + t));
+  if (!pool.length) return [];
+  const chosen = shuffle(pool.slice()).slice(0, Math.min(20, n * 3));
+  const d = await getJSON(wikiQS({
+    action: "query", redirects: "1", prop: "extracts|pageimages|description|info", exintro: "1", explaintext: "1",
+    exsentences: "6", exlimit: "max", piprop: "thumbnail", pithumbsize: "800", inprop: "url", titles: chosen.join("|"),
+  }), { headers: WIKI_HEADERS });
+  const out = [];
+  for (const p of shuffle(d.query.pages || [])) {
+    if (p.missing || !p.thumbnail || words(p.extract) < 35) { chosen.forEach(t => t === p.title && markSeen("wiki:" + t)); continue; }
+    out.push({
+      id: "wiki:" + p.title, cat: topic, h: p.title, t: brief(p.extract),
+      fact: p.description ? p.description.charAt(0).toUpperCase() + p.description.slice(1) : "",
+      img: p.thumbnail.source, alt: p.title, credit: "Wikimedia Commons (see article for licence)",
+      source: ["Wikipedia", p.fullurl || "https://en.wikipedia.org/wiki/" + encodeURIComponent(p.title.replace(/ /g, "_"))],
+      more: [["Read more on Internet Archive", archive(p.title)]],
+    });
+    if (out.length >= n) break;
+  }
+  return out;
+}
+
+// 3) Wikipedia "On this day": notable events for a random date (editor-selected list).
+async function onThisDayCards(n) {
+  const d0 = new Date(2001, 0, 1 + Math.floor(Math.random() * 365));
+  const mm = String(d0.getMonth() + 1).padStart(2, "0"), dd = String(d0.getDate()).padStart(2, "0");
+  const d = await getJSON("https://en.wikipedia.org/api/rest_v1/feed/onthisday/selected/" + mm + "/" + dd, { headers: WIKI_HEADERS });
+  const events = (d.selected || []).sort((a, b) => (a.year > 2000) - (b.year > 2000) || Math.random() - 0.5);
+  const out = [];
+  for (const e of events) {
+    if (GRIM.test(e.text)) continue;
+    const p = (e.pages || []).find(p => p.thumbnail && words(p.extract) >= 30);
+    if (!p) continue;
+    const id = "otd:" + e.year + ":" + p.title;
+    if (seen.has(id) || seen.has("wiki:" + stripTags(p.titles && p.titles.normalized || p.title))) continue;
+    const name = stripTags((p.titles && p.titles.normalized) || p.title.replace(/_/g, " "));
+    out.push({
+      id, cat: "history", h: stripTags(e.text), t: brief(p.extract),
+      fact: d0.getDate() + " " + MONTHS[d0.getMonth()] + " " + (e.year < 0 ? -e.year + " BC" : e.year),
+      img: (p.thumbnail || {}).source, alt: name, credit: "Wikimedia Commons (see article for licence)",
+      source: ["Wikipedia · On this day", (p.content_urls && p.content_urls.mobile && p.content_urls.mobile.page) || "https://en.wikipedia.org/wiki/" + p.title],
+      more: [["Read more on Internet Archive", archive(name)]],
+    });
+    if (out.length >= n) break;
+  }
+  return out;
+}
+
+// 4) USGS significant earthquakes of the past month (official, updated every few minutes).
+async function quakeCards(n) {
+  const d = await getJSON("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson");
+  const out = [];
+  for (const f of d.features || []) {
+    const q = f.properties, id = "usgs:" + f.id;
+    if (seen.has(id)) continue;
+    const when = new Date(q.time), depth = f.geometry && f.geometry.coordinates ? Math.round(f.geometry.coordinates[2]) : null;
+    const bits = [
+      "A magnitude " + q.mag.toFixed(1) + " earthquake struck " + q.place + " on " + fmtDate(when) + (depth != null ? ", about " + depth + " km below the surface." : "."),
+      q.felt ? q.felt.toLocaleString() + " people reported feeling it to the USGS." : "",
+      q.alert ? "USGS issued a " + q.alert + " alert for expected impact." : "",
+      q.tsunami ? "The event was in an ocean region, so tsunami centres reviewed it." : "",
+      "It is listed among the month's significant earthquakes, chosen by the USGS for their size, felt reports and likely impact.",
+    ];
+    out.push({
+      id, cat: "geography", h: "M" + q.mag.toFixed(1) + " earthquake: " + q.place, t: bits.filter(Boolean).join(" "),
+      fact: fmtDate(when) + " · live data", big: ["M" + q.mag.toFixed(1), "Earthquake"], alt: "",
+      source: ["USGS Earthquake Hazards Program", q.url],
+      more: [["Read more on Internet Archive", archive("earthquake " + q.place.split(", ").pop())]],
+    });
+    if (out.length >= n) break;
+  }
+  return out;
+}
+
+let quakesShown = false;
+const SOURCES = {
+  space: n => [nasaCards(Math.ceil(n * 2 / 3)), wikiCards("space", Math.floor(n / 3))],
+  history: n => [onThisDayCards(Math.ceil(n / 2)), wikiCards("history", Math.floor(n / 2))],
+  geography: n => {
+    const s = [wikiCards("geography", n)];
+    if (!quakesShown) { quakesShown = true; s.push(quakeCards(1)); }
+    return s;
+  },
+};
+
+/* ---------- state and rendering ---------- */
+let items = [];                       // hand-written cards + everything loaded live this visit
+let topic = "all";
+try { const t = localStorage.getItem("oa-topic"); if (TOPICS.some(x => x[0] === t)) topic = t; } catch (e) {}
+let loading = false, endEl = null, io, nearEnd;
+
+function card(c, i) {
+  const s = el("article", "card " + c.cat); s.dataset.i = i;
+  const f = el("figure");
+  if (c.img) {
+    const img = el("img"); img.alt = c.alt || ""; img.decoding = "async"; img.loading = i > 2 ? "lazy" : "eager";
+    img.referrerPolicy = "no-referrer";
+    img.onerror = () => { if (c.imgFallback && img.src !== c.imgFallback) img.src = c.imgFallback; else img.remove(); };
+    img.src = c.img; f.append(img);
+    if (c.credit) f.append(el("figcaption", null, "Image: " + c.credit));
+  } else if (c.big) {
+    const b = el("div", "big", c.big[0]); b.append(el("small", null, c.big[1])); f.append(b);
+  }
+  s.append(f);
+  const b = el("div", "body");
+  const m = el("div", "meta"); m.append(el("span", "chip", c.cat));
+  if (c.fact) m.append(el("span", "fact", c.fact));
+  if (c.live) m.append(el("span", "live", "Loaded live"));
+  const src = el("div", "src");
+  const r1 = el("div", "row"); r1.append(el("b", null, c.live ? "Source" : "Official source"), link(c.source[1], c.source[0])); src.append(r1);
+  const r2 = el("div", "row"); for (const [label, href] of c.more || []) r2.append(link(href, label)); if (r2.childNodes.length) src.append(r2);
+  b.append(m, el("h2", null, c.h), el("p", null, c.t), src); s.append(b);
+  return s;
+}
+
+// The hand-written cards use a slightly different shape; convert once.
+function fromStatic(c) {
+  return { id: "static:" + c.id, cat: c.cat, h: c.h, t: c.t, fact: c.fact, img: c.img, alt: c.alt, credit: c.credit,
+    source: c.off, more: [["Read more on Internet Archive", c.ar], ["Wikipedia", c.wiki]] };
+}
+
+const visible = () => items.filter(c => topic === "all" || c.cat === topic);
+function setCount(i, n) { count.textContent = String(i + 1).padStart(2, "0") + " / " + String(n).padStart(2, "0"); }
+
+function endPanel() {
+  const end = el("section", "end");
+  endEl = end; drawEnd("idle");
+  return end;
+}
+function drawEnd(state, msg) {
+  if (!endEl) return;
+  const n = visible().length;
+  const kids = [];
+  if (state === "loading") {
+    kids.push(el("div", "spin"), el("h2", null, "Finding more stories…"), el("p", "note", "From NASA, USGS and Wikipedia"));
+  } else {
+    kids.push(el("h2", null, state === "error" ? "Couldn't load more" : "You've read " + n + " stories"));
+    kids.push(el("p", "note", state === "error" ? msg : "Load more fetches new cards live from NASA, USGS and Wikipedia. It doesn't use AI or any tokens."));
+    const a = el("div", "actions");
+    const more = el("button", "primary", state === "error" ? "Try again" : "Load more"); more.onclick = () => loadMore();
+    const top = el("button", null, "Back to top"); top.onclick = () => feed.scrollTo({ top: 0 });
+    a.append(more, top); kids.push(a);
+  }
+  endEl.replaceChildren(...kids);
+}
+
+function observe() {
+  if (io) io.disconnect();
+  const n = visible().length;
+  io = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) setCount(+e.target.dataset.i, n); }, { root: feed, threshold: 0.6 });
+  feed.querySelectorAll(".card").forEach(c => io.observe(c));
+  // Start loading quietly when the reader is two cards from the end.
+  if (nearEnd) nearEnd.disconnect();
+  const cards = feed.querySelectorAll(".card"), trigger = cards[Math.max(0, cards.length - 2)];
+  nearEnd = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) loadMore(); }, { root: feed, threshold: 0.6 });
+  if (trigger) nearEnd.observe(trigger);
+}
+
+function render() {
+  const list = visible();
+  feed.replaceChildren(...list.map((c, i) => card(c, i)), endPanel());
+  for (const b of tabs.children) b.setAttribute("aria-selected", b.dataset.t === topic);
+  tabs.className = topic === "all" ? "" : topic;
+  feed.scrollTo({ top: 0 });
+  if (list.length) setCount(0, list.length);
+  observe();
+}
+
+async function loadMore() {
+  if (loading) return;
+  loading = true; drawEnd("loading");
+  const want = topic === "all" ? ["space", "history", "geography"] : [topic];
+  const per = topic === "all" ? PER_TOPIC : PER_SINGLE;
+  const results = await Promise.allSettled(want.flatMap(t => SOURCES[t](per)));
+  const fresh = [], seenNow = new Set(items.map(c => c.id));
+  let busy = false;
+  for (const r of results) {
+    if (r.status === "rejected") { if (String(r.reason && r.reason.message) === "busy") busy = true; continue; }
+    for (const c of r.value) if (c && c.h && c.t && !seenNow.has(c.id)) { seenNow.add(c.id); c.live = true; fresh.push(c); }
+  }
+  // Interleave topics so the All tab alternates space / history / geography.
+  const byCat = {}; for (const c of shuffle(fresh)) (byCat[c.cat] = byCat[c.cat] || []).push(c);
+  const ordered = []; for (let added = true; added;) { added = false; for (const t of want) { const c = (byCat[t] || []).shift(); if (c) { ordered.push(c); added = true; } } }
+
+  loading = false;
+  if (!ordered.length) {
+    drawEnd("error", navigator.onLine === false ? "You seem to be offline. Connect and try again."
+      : busy ? "The sources are busy right now. Wait a minute and try again." : "The sources didn't return anything new. Try again.");
+    return;
+  }
+  items.push(...ordered);
+  ordered.forEach(c => markSeen(c.id));
+  const start = visible().length - ordered.length;
+  const nodes = ordered.map((c, k) => card(c, start + k));
+  endEl.before(...nodes);
+  drawEnd("idle");
+  observe();
+}
+
+for (const [k, label] of TOPICS) {
+  const b = el("button", null, label); b.dataset.t = k; b.setAttribute("role", "tab");
+  b.onclick = () => { if (topic === k) return; topic = k; try { localStorage.setItem("oa-topic", k); } catch (e) {} render(); };
+  tabs.append(b);
+}
+document.addEventListener("keydown", e => {
+  if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "j" && e.key !== "k") return;
+  e.preventDefault(); feed.scrollBy({ top: (e.key === "ArrowDown" || e.key === "j" ? 1 : -1) * feed.clientHeight });
+});
+
+fetch("cards.json").then(r => r.json()).then(list => { items = list.map(fromStatic); render(); })
+  .catch(() => { items = []; render(); loadMore(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+[
+ {
+  "id": 0,
+  "h": "Voyager 1 is the farthest thing humans have ever built",
+  "t": "Launched by NASA on 5 September 1977, Voyager 1 flew past Jupiter and Saturn, then kept going. In 2012 it crossed the heliopause and became the first spacecraft in interstellar space. It is now nearly 26 billion km away, so a radio signal takes almost a full day to reach it. Its plutonium power is fading, and instruments are being switched off one by one.",
+  "fact": "Launched 5 Sep 1977",
+  "off": [
+   "NASA Science",
+   "https://science.nasa.gov/mission/voyager/voyager-1/"
+  ],
+  "ar": "https://archive.org/details/voyagerencounter56205gut",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/Voyager_1",
+  "alt": "Voyager 1",
+  "img": "img/00.jpg",
+  "credit": "NASA · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 1,
+  "h": "A golden record is carrying Earth's greatest hits out of the solar system",
+  "t": "Each Voyager probe carries a 12-inch gold-plated copper record meant for anyone who might find it. A committee chaired by Carl Sagan chose 115 encoded images, natural sounds, greetings in 55 languages and 90 minutes of music, from Bach to Chuck Berry. The cover has instructions for playing it, drawn in symbols based on physics instead of words.",
+  "fact": "Launched 1977",
+  "off": [
+   "NASA Science",
+   "https://science.nasa.gov/mission/voyager/"
+  ],
+  "ar": "https://archive.org/search?query=voyager+golden+record",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/Voyager_Golden_Record",
+  "alt": "Voyager Golden Record",
+  "img": "img/01.jpg",
+  "credit": "NASA · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 2,
+  "h": "Earth looks like a speck of dust from 6 billion km away",
+  "t": "On 14 February 1990, at Carl Sagan's request, Voyager 1 turned its camera back toward home and took a family portrait of the solar system. In one frame, Earth shows up as a dot smaller than a single pixel, caught in a beam of scattered sunlight. Sagan later wrote that the picture shows how small, and how shared, our world is.",
+  "fact": "Taken 14 Feb 1990",
+  "off": [
+   "NASA Science",
+   "https://science.nasa.gov/mission/voyager/"
+  ],
+  "ar": "https://archive.org/search?query=pale+blue+dot+sagan",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/Pale_Blue_Dot",
+  "alt": "Pale Blue Dot",
+  "img": "img/02.jpg",
+  "credit": "NASA/JPL · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 3,
+  "h": "Apollo 11 put the first humans on the Moon",
+  "t": "Apollo 11 launched on 16 July 1969. Four days later, Neil Armstrong and Buzz Aldrin landed the lunar module Eagle in the Sea of Tranquility while Michael Collins orbited above. They spent about two and a half hours walking outside and collected 21.5 kg of rock and soil. All three splashed down safely in the Pacific on 24 July.",
+  "fact": "Landed 20 Jul 1969",
+  "off": [
+   "NASA",
+   "https://www.nasa.gov/mission/apollo-11/"
+  ],
+  "ar": "https://archive.org/details/gov.archives.arc.45017",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/Apollo_11",
+  "alt": "Apollo 11",
+  "img": "img/03.jpg",
+  "credit": "NASA / Neil Armstrong · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 4,
+  "h": "A beeping metal ball started the space age",
+  "t": "On 4 October 1957 the Soviet Union launched Sputnik 1, the first artificial satellite. It was a polished sphere 58 cm across with four long antennas, and anyone with a shortwave radio could hear its beep. The signal stopped after three weeks when its batteries ran out, and it burned up in the atmosphere on 4 January 1958. The shock in America helped create NASA.",
+  "fact": "Launched 4 Oct 1957",
+  "off": [
+   "NASA History",
+   "https://www.nasa.gov/history/sputnik/"
+  ],
+  "ar": "https://archive.org/search?query=sputnik+1957",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/Sputnik_1",
+  "alt": "Sputnik 1",
+  "img": "img/04.jpg",
+  "credit": "Andrey Butko · CC BY-SA 3.0 · Wikimedia Commons"
+ },
+ {
+  "id": 5,
+  "h": "Hubble launched blurry, then changed astronomy",
+  "t": "The Hubble Space Telescope reached orbit on 24 April 1990 aboard the Space Shuttle Discovery, but its main mirror had been ground to the wrong shape. Astronauts installed corrective optics in 1993, and the images turned sharp. Since then Hubble has helped pin down the age of the universe at about 13.8 billion years and showed that the universe's expansion is speeding up.",
+  "fact": "Launched 24 Apr 1990",
+  "off": [
+   "NASA Science",
+   "https://science.nasa.gov/mission/hubble/"
+  ],
+  "ar": "https://archive.org/details/QuarterCenturyDiscoveryWithHubble",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/Hubble_Space_Telescope",
+  "alt": "Hubble Space Telescope",
+  "img": "img/05.jpg",
+  "credit": "NASA · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 6,
+  "h": "Webb sees in infrared, back to the first galaxies",
+  "t": "The James Webb Space Telescope launched on Christmas Day 2021 and now sits 1.5 million km from Earth. Its gold-coated mirror is 6.5 m wide, made of 18 hexagons that unfolded in space. Because it sees infrared light, it can look through dust clouds and pick up galaxies whose light has been travelling for more than 13 billion years.",
+  "fact": "Launched 25 Dec 2021",
+  "off": [
+   "NASA Science",
+   "https://science.nasa.gov/mission/webb/"
+  ],
+  "ar": "https://archive.org/details/jameswebbspacetelescopenasa",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/James_Webb_Space_Telescope",
+  "alt": "James Webb Space Telescope",
+  "img": "img/06.jpg",
+  "credit": "NASA · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 7,
+  "h": "Cassini spent 13 years at Saturn, then dived into it",
+  "t": "Cassini–Huygens, a joint mission of NASA, the European Space Agency and Italy's space agency, launched on 15 October 1997 and entered orbit around Saturn in 2004. Its Huygens probe landed on the moon Titan in 2005. Cassini found water jets spraying from the moon Enceladus. To avoid contaminating moons that might host life, it was steered into Saturn on 15 September 2017.",
+  "fact": "Orbited Saturn 2004–2017",
+  "off": [
+   "NASA Science",
+   "https://science.nasa.gov/mission/cassini/"
+  ],
+  "ar": "https://archive.org/details/nasa_techdoc_20040052869",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens",
+  "alt": "Cassini–Huygens",
+  "img": "img/07.jpg",
+  "credit": "NASA/JPL · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 8,
+  "h": "A car-sized robot has been exploring Mars since 2012",
+  "t": "NASA's Curiosity rover launched on 26 November 2011 and was lowered onto Gale Crater by a rocket-powered sky crane in August 2012. It was planned to work for two years and is still driving more than a decade later. Its rock samples show that the crater once held a lake with the chemical ingredients microbes would need.",
+  "fact": "Landed 6 Aug 2012",
+  "off": [
+   "NASA Science",
+   "https://science.nasa.gov/mission/msl-curiosity/"
+  ],
+  "ar": "https://archive.org/details/msl20110624b-1280-i",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/Curiosity_(rover)",
+  "alt": "Curiosity (rover)",
+  "img": "img/08.jpg",
+  "credit": "NASA · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 9,
+  "h": "People have lived in orbit without a break since 2000",
+  "t": "The International Space Station's first module launched on 20 November 1998. The first crew moved in on 2 November 2000, and the station has been occupied ever since. It is run by the space agencies of the US, Russia, Europe, Japan and Canada. At about 109 m end to end, it is the largest structure people have built in space, and it circles Earth roughly every 90 minutes.",
+  "fact": "Crewed since 2 Nov 2000",
+  "off": [
+   "NASA",
+   "https://www.nasa.gov/international-space-station/"
+  ],
+  "ar": "https://archive.org/details/go_for_assembly",
+  "cat": "space",
+  "wiki": "https://en.wikipedia.org/wiki/International_Space_Station",
+  "alt": "International Space Station",
+  "img": "img/09.jpg",
+  "credit": "NASA · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 10,
+  "h": "Berlin woke up to a wall overnight",
+  "t": "In the early hours of 13 August 1961, East German troops strung barbed wire across Berlin to stop people escaping to the West. The barrier became a concrete wall about 155 km long that encircled West Berlin, with guard towers and a cleared death strip. It split families and streets for 28 years, and at least 140 people died at the wall.",
+  "fact": "Built from 13 Aug 1961",
+  "off": [
+   "Berlin Wall Memorial",
+   "https://www.berliner-mauer-gedenkstaette.de/en/"
+  ],
+  "ar": "https://archive.org/details/Berlin-Wall-CIA-Collection",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Berlin_Wall",
+  "alt": "Berlin Wall",
+  "img": "img/10.jpg",
+  "credit": "Noir · CC BY-SA 3.0 · Wikimedia Commons"
+ },
+ {
+  "id": 11,
+  "h": "A press conference mistake opened the Berlin Wall",
+  "t": "On 9 November 1989 East German official Günter Schabowski announced new travel rules on live TV. Asked when they took effect, he looked at his notes and said 'immediately, without delay.' Thousands rushed to the checkpoints, and overwhelmed guards opened the gates that night. Within a year, on 3 October 1990, Germany was reunified.",
+  "fact": "Opened 9 Nov 1989",
+  "off": [
+   "Encyclopaedia Britannica",
+   "https://www.britannica.com/topic/Berlin-Wall"
+  ],
+  "ar": "https://archive.org/details/fallofberlinwall0000unse",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Fall_of_the_Berlin_Wall",
+  "alt": "Fall of the Berlin Wall",
+  "img": "img/11.jpg",
+  "credit": "Unknown photographer · CC BY-SA 3.0 · Wikimedia Commons"
+ },
+ {
+  "id": 12,
+  "h": "When Berlin was cut off, it was supplied by air",
+  "t": "In June 1948 the Soviet Union blocked all road, rail and canal routes into West Berlin. The US and Britain answered with the Berlin Airlift, flying in food, coal and medicine around the clock. Over about eleven months, planes made more than 270,000 flights. The Soviets lifted the blockade on 12 May 1949, an early Western win of the Cold War.",
+  "fact": "24 Jun 1948 – 12 May 1949",
+  "off": [
+   "US State Dept. Historian",
+   "https://history.state.gov/milestones/1945-1952/berlin-airlift"
+  ],
+  "ar": "https://archive.org/details/Berlinairlift00Unit",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Berlin_Blockade",
+  "alt": "Berlin Blockade",
+  "img": "img/12.jpg",
+  "credit": "Henry Ries / USAF · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 13,
+  "h": "13 days in 1962 brought the world close to nuclear war",
+  "t": "In October 1962 American spy planes photographed Soviet nuclear missile sites under construction in Cuba. President Kennedy ordered a naval blockade, and for 13 days, from 16 to 28 October, the US and USSR stood at the brink. Khrushchev agreed to remove the missiles. In return the US promised not to invade Cuba and later quietly removed its missiles from Turkey.",
+  "fact": "16–28 Oct 1962",
+  "off": [
+   "US State Dept. Historian",
+   "https://history.state.gov/milestones/1961-1968/cuban-missile-crisis"
+  ],
+  "ar": "https://archive.org/details/CubanMissileCrisisDocuments",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Cuban_Missile_Crisis",
+  "alt": "Cuban Missile Crisis",
+  "img": "img/13.jpg",
+  "credit": "USAF · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 14,
+  "h": "One stone unlocked Egyptian hieroglyphs",
+  "t": "The Rosetta Stone carries the same decree from 196 BC written three ways: in hieroglyphs, in Demotic script and in ancient Greek. French soldiers found it near Rashid (Rosetta) in 1799, and it has been in the British Museum since 1802. Because scholars could read the Greek, Jean-François Champollion used it to decipher hieroglyphs in 1822.",
+  "fact": "Decree of 196 BC",
+  "off": [
+   "British Museum",
+   "https://www.britishmuseum.org/collection/object/Y_EA24"
+  ],
+  "ar": "https://archive.org/details/rosettastone00budguoft",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Rosetta_Stone",
+  "alt": "Rosetta Stone",
+  "img": "img/14.jpg",
+  "credit": "Hans Hillewaert · CC BY-SA 4.0 · Wikimedia Commons"
+ },
+ {
+  "id": 15,
+  "h": "Magna Carta failed within weeks, then outlived its makers",
+  "t": "On 15 June 1215 King John sealed Magna Carta at Runnymede to make peace with rebel barons. The pope annulled it within weeks and civil war followed. It was reissued in 1216, 1217 and 1225, and its promise that no free man be imprisoned except by lawful judgment shaped later ideas of due process, including the US Bill of Rights.",
+  "fact": "Sealed 15 Jun 1215",
+  "off": [
+   "US National Archives",
+   "https://www.archives.gov/exhibits/featured-documents/magna-carta"
+  ],
+  "ar": "https://archive.org/details/magnacartacommen00mckeuoft",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Magna_Carta",
+  "alt": "Magna Carta",
+  "img": "img/15.jpg",
+  "credit": "1215 charter scan · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 16,
+  "h": "Gutenberg's press made books cheap enough to spread ideas",
+  "t": "Around 1440 in Mainz, Johannes Gutenberg combined movable metal type, oil-based ink and a screw press adapted from wine making. His Bible, finished around 1455, showed that books could be made fast and well. By 1500, printers across Western Europe had produced more than twenty million volumes, which helped fuel the Reformation and the Scientific Revolution.",
+  "fact": "c. 1440, Mainz",
+  "off": [
+   "Encyclopaedia Britannica",
+   "https://www.britannica.com/technology/printing-press"
+  ],
+  "ar": "https://archive.org/details/shorthistoryofpr00hoeruoft",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Printing_press",
+  "alt": "Printing press",
+  "img": "img/16.jpg",
+  "credit": "International Printing Museum · CC0 · Wikimedia Commons"
+ },
+ {
+  "id": 17,
+  "h": "The Silk Road carried more than silk",
+  "t": "From the 2nd century BCE to the mid-1400s, a web of land and sea routes linked China with Central Asia, India, Persia and the Mediterranean. Silk went west, while horses, glass, spices, paper-making, religions and diseases moved in every direction. The overland routes covered more than 6,400 km. The name 'Silk Road' was only coined in 1877, by German geographer Ferdinand von Richthofen.",
+  "fact": "2nd c. BCE – mid-15th c.",
+  "off": [
+   "UNESCO World Heritage",
+   "https://whc.unesco.org/en/list/1442/"
+  ],
+  "ar": "https://archive.org/details/silkroadconnecti00smit",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Silk_Road",
+  "alt": "Silk Road",
+  "img": "img/17.jpg",
+  "credit": "Kelvin Case and others · CC BY-SA 4.0 · Wikimedia Commons"
+ },
+ {
+  "id": 18,
+  "h": "The Great Wall is many walls built over 2,000 years",
+  "t": "China's first border walls date to the 7th century BC. They were linked under the Qin dynasty and rebuilt by later dynasties. The brick sections most visitors see were built by the Ming dynasty between 1368 and 1644. A Chinese survey in 2012 counted about 21,000 km of walls in all. Despite the popular myth, it can't be seen with the naked eye from the Moon.",
+  "fact": "~21,000 km (2012 survey)",
+  "off": [
+   "UNESCO World Heritage",
+   "https://whc.unesco.org/en/list/438/"
+  ],
+  "ar": "https://archive.org/details/greatwallofchina00geiluoft",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Great_Wall_of_China",
+  "alt": "Great Wall of China",
+  "img": "img/18.jpg",
+  "credit": "Severin.stalder · CC BY-SA 3.0 · Wikimedia Commons"
+ },
+ {
+  "id": 19,
+  "h": "The Space Race began with Sputnik and ended in a handshake",
+  "t": "The US–Soviet race for space started with Sputnik in October 1957. The Soviets took early leads with the first satellite, the first animal and, in 1961, Yuri Gagarin as the first human in orbit. The US answered with the Apollo Moon landings. The rivalry eased in July 1975, when Apollo and Soyuz crews docked and shook hands in orbit.",
+  "fact": "1957 – 1975",
+  "off": [
+   "Encyclopaedia Britannica",
+   "https://www.britannica.com/topic/Space-Race"
+  ],
+  "ar": "https://archive.org/details/nasa_techdoc_20000088626",
+  "cat": "history",
+  "wiki": "https://en.wikipedia.org/wiki/Space_Race",
+  "alt": "Space Race",
+  "img": "img/19.jpg",
+  "credit": "NASA · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 20,
+  "h": "A weather scientist said continents move, and was mocked",
+  "t": "In 1912 German meteorologist Alfred Wegener argued that the continents had once been joined and slowly drifted apart. His evidence was matching coastlines, fossils and rock layers on opposite sides of oceans. Most geologists rejected the idea because he could not explain what moved them. He died on a Greenland expedition in 1930, decades before seafloor studies proved him right.",
+  "fact": "Proposed 1912",
+  "off": [
+   "USGS",
+   "https://pubs.usgs.gov/gip/dynamic/historical.html"
+  ],
+  "ar": "https://archive.org/search?query=continental+drift+wegener",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/Continental_drift",
+  "alt": "Continental drift",
+  "img": "img/20.jpg",
+  "credit": "Unknown author · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 21,
+  "h": "All the land on Earth was once one supercontinent",
+  "t": "Pangaea, Greek for 'all lands', came together about 335 million years ago and began breaking apart about 175 million years ago, early in the age of dinosaurs. It was a C-shaped landmass surrounded by a single ocean, Panthalassa. As it split, the Atlantic Ocean opened. Geologists expect the continents to merge into a new supercontinent in a few hundred million years.",
+  "fact": "~335 to ~175 million years ago",
+  "off": [
+   "USGS",
+   "https://pubs.usgs.gov/gip/dynamic/historical.html"
+  ],
+  "ar": "https://archive.org/search?query=pangaea+supercontinent",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/Pangaea",
+  "alt": "Pangaea",
+  "img": "img/21.jpg",
+  "credit": "C. R. Scotese et al. · CC BY 4.0 · Wikimedia Commons"
+ },
+ {
+  "id": 22,
+  "h": "Earth's surface is a cracked shell that keeps moving",
+  "t": "Plate tectonics explains continental drift. Earth's rigid outer layer is broken into about seven or eight major plates and many smaller ones, moving a few centimetres a year, about as fast as fingernails grow. Where plates pull apart, new crust forms. Where they collide, mountains rise or one plate sinks beneath another. Their edges are where most earthquakes and volcanoes happen.",
+  "fact": "Accepted in the 1960s",
+  "off": [
+   "USGS",
+   "https://pubs.usgs.gov/gip/dynamic/understanding.html"
+  ],
+  "ar": "https://archive.org/details/AP_Environmental_Sci_NOAA_Lesson_01",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/Plate_tectonics",
+  "alt": "Plate tectonics",
+  "img": "img/22.jpg",
+  "credit": "M. Bitton · CC BY-SA 3.0 · Wikimedia Commons"
+ },
+ {
+  "id": 23,
+  "h": "The longest mountain range on Earth is underwater",
+  "t": "The Mid-Atlantic Ridge runs down the middle of the Atlantic Ocean from near Greenland to the far South Atlantic. It is part of a mid-ocean ridge system that circles the globe. In the 1950s, cartographer Marie Tharp spotted a rift valley along its crest, key evidence that the seafloor is spreading. Iceland is one of the few places where the ridge rises above the sea.",
+  "fact": "Spreads ~2.5 cm a year",
+  "off": [
+   "USGS",
+   "https://pubs.usgs.gov/gip/dynamic/developing.html"
+  ],
+  "ar": "https://archive.org/search?query=mid-atlantic+ridge",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/Mid-Atlantic_Ridge",
+  "alt": "Mid-Atlantic Ridge",
+  "img": "img/23.jpg",
+  "credit": "NOAA · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 24,
+  "h": "Mount Everest got officially taller in 2020",
+  "t": "Everest sits on the border between Nepal and China in the Himalayas, which are still being pushed up as India crashes into Asia. In 2020 a joint Nepalese and Chinese survey set its height at 8,848.86 m, slightly more than the old figure of 8,848 m. Edmund Hillary and Tenzing Norgay first reached the summit on 29 May 1953.",
+  "fact": "8,848.86 m (2020 survey)",
+  "off": [
+   "Encyclopaedia Britannica",
+   "https://www.britannica.com/place/Mount-Everest"
+  ],
+  "ar": "https://archive.org/details/assaultonmountev00bruc",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/Mount_Everest",
+  "alt": "Mount Everest",
+  "img": "img/24.jpg",
+  "credit": "Rdevany · CC BY-SA 3.0 · Wikimedia Commons"
+ },
+ {
+  "id": 25,
+  "h": "Most of the world's volcanoes ring the Pacific",
+  "t": "The Ring of Fire is a horseshoe-shaped belt about 40,000 km long that traces the edges of the Pacific Ocean, from New Zealand through Japan and Alaska down to Chile. Here ocean plates slide beneath other plates and melt, feeding volcanoes. About three quarters of Earth's active and dormant volcanoes lie along it, and roughly 90 percent of earthquakes happen there.",
+  "fact": "~40,000 km long",
+  "off": [
+   "National Geographic Education",
+   "https://education.nationalgeographic.org/resource/ring-fire/"
+  ],
+  "ar": "https://archive.org/search?query=ring+of+fire+volcanoes",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/Ring_of_Fire",
+  "alt": "Ring of Fire",
+  "img": "img/25.jpg",
+  "credit": "Gringer · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 26,
+  "h": "If Everest fell into the Mariana Trench, its peak would be underwater",
+  "t": "The Mariana Trench in the western Pacific is about 2,550 km long. Its deepest point, Challenger Deep, is nearly 11 km below the surface, more than 2 km deeper than Everest is tall. Jacques Piccard and Don Walsh first reached the bottom in the bathyscaphe Trieste in 1960. Filmmaker James Cameron made the first solo dive there in 2012.",
+  "fact": "~10,935 m deep",
+  "off": [
+   "Encyclopaedia Britannica",
+   "https://www.britannica.com/place/Mariana-Trench"
+  ],
+  "ar": "https://archive.org/search?query=mariana+trench+challenger+deep",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/Mariana_Trench",
+  "alt": "Mariana Trench",
+  "img": "img/26.jpg",
+  "credit": "wallace · CC BY 2.5 · Wikimedia Commons"
+ },
+ {
+  "id": 27,
+  "h": "The Sahara was green just a few thousand years ago",
+  "t": "Covering about 9.2 million square km, the Sahara is the largest hot desert on Earth, nearly the size of the United States. Only the polar deserts of Antarctica and the Arctic are bigger. Between roughly 11,000 and 5,000 years ago, shifts in Earth's orbit brought stronger monsoon rains. Lakes, grasslands and hippos filled the region, as rock art from that time shows.",
+  "fact": "~9.2 million km²",
+  "off": [
+   "Encyclopaedia Britannica",
+   "https://www.britannica.com/place/Sahara-desert-Africa"
+  ],
+  "ar": "https://archive.org/details/b29327052_0001",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/Sahara",
+  "alt": "Sahara",
+  "img": "img/27.jpg",
+  "credit": "Project Apollo Archive · Public domain · Wikimedia Commons"
+ },
+ {
+  "id": 28,
+  "h": "The Amazon carries more water than any other river",
+  "t": "The Amazon flows about 6,400 km from the Peruvian Andes to the Atlantic, and its length is still argued over with the Nile's. By volume there is no contest: it pours out about a fifth of all river water entering the world's oceans. Its main stretch has no bridges, partly because its banks flood and shift so much.",
+  "fact": "~6,400 km long",
+  "off": [
+   "Encyclopaedia Britannica",
+   "https://www.britannica.com/place/Amazon-River"
+  ],
+  "ar": "https://archive.org/details/voyageupriverama00edwarich",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/Amazon_River",
+  "alt": "Amazon River",
+  "img": "img/28.jpg",
+  "credit": "European Space Agency · CC BY-SA 3.0 igo · Wikimedia Commons"
+ },
+ {
+  "id": 29,
+  "h": "Krakatoa's 1883 eruption was heard 4,800 km away",
+  "t": "On 26 and 27 August 1883 the volcanic island of Krakatoa, between Java and Sumatra, blew itself apart. The final blast was heard on Rodrigues Island in the Indian Ocean, about 4,800 km away. Tsunamis up to 40 m high killed around 36,000 people. Ash in the upper atmosphere caused vivid red sunsets worldwide and cooled the planet for several years.",
+  "fact": "26–27 Aug 1883",
+  "off": [
+   "Smithsonian Global Volcanism",
+   "https://volcano.si.edu/volcano.cfm?vn=262000"
+  ],
+  "ar": "https://archive.org/details/eruptionofkrakat00roya",
+  "cat": "geography",
+  "wiki": "https://en.wikipedia.org/wiki/1883_eruption_of_Krakatoa",
+  "alt": "1883 eruption of Krakatoa",
+  "img": "img/29.jpg",
+  "credit": "Unknown artist · Public domain · Wikimedia Commons"
+ }
+]
