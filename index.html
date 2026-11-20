@@ -18,7 +18,7 @@
    The last panel loads more cards live from public APIs. */
 :root {
   --bg: #eef0f5; --surface: #ffffff; --ink: #141824; --muted: #596174; --line: #dce0ea;
-  --space: #3a49c4; --history: #a3383c; --geo: #1c7656; --chip-ink: #ffffff;
+  --space: #3a49c4; --history: #a3383c; --geo: #1c7656; --india: #b4570b; --chip-ink: #ffffff;
   --display: "Newsreader", Georgia, "Times New Roman", serif;
   --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
@@ -26,7 +26,7 @@
 }
 @media (prefers-color-scheme: dark) { :root {
   --bg: #0b0e15; --surface: #151a25; --ink: #e8ebf3; --muted: #9aa2b6; --line: #262d3d;
-  --space: #8d9bff; --history: #ff8f8c; --geo: #62d3a8; --chip-ink: #0b0e15; color-scheme: dark } }
+  --space: #8d9bff; --history: #ff8f8c; --geo: #62d3a8; --india: #f2a65a; --chip-ink: #0b0e15; color-scheme: dark } }
 
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
@@ -47,7 +47,7 @@ nav button:focus-visible, a:focus-visible, .end button:focus-visible { outline: 
 .feed { flex: 1 1 auto; min-height: 0; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; scrollbar-width: none; }
 .feed::-webkit-scrollbar { display: none; }
 .card { height: 100%; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; border-bottom: 1px solid var(--line); }
-.space { --accent: var(--space); } .history { --accent: var(--history); } .geography { --accent: var(--geo); }
+.space { --accent: var(--space); } .history { --accent: var(--history); } .geography { --accent: var(--geo); } nav.india { --accent: var(--india); }
 figure { position: relative; margin: 0; flex: 0 0 40%; min-height: 0; overflow: hidden;
   background: linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--muted)) 35%, var(--surface)), color-mix(in srgb, var(--accent, var(--muted)) 10%, var(--surface))); }
 figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -91,7 +91,7 @@ figcaption { position: absolute; right: 6px; bottom: 6px; max-width: calc(100% -
 <script>
 "use strict";
 /* ---------- settings ---------- */
-const TOPICS = [["all", "All"], ["space", "Space"], ["history", "History"], ["geography", "Geography"]];
+const TOPICS = [["all", "All"], ["space", "Space"], ["history", "History"], ["geography", "Geography"], ["india", "India"]];
 const PER_TOPIC = 3;               // new cards per topic per "Load more" (All tab gets 3 of each)
 const PER_SINGLE = 6;              // new cards per "Load more" on a single-topic tab
 const WEEK = 7 * 24 * 3600 * 1000;
@@ -103,11 +103,21 @@ const VITAL = {
   history: ["Wikipedia:Vital articles/Level 5/History"],
   geography: ["Wikipedia:Vital articles/Level 5/Geography/Physical"],
 };
+// India tab: articles that Wikipedia's India-focused editor groups (WikiProjects) rate as
+// Top or High importance. These categories list the articles' talk pages.
+const INDIA_CATS = {
+  "india-history": ["Top-importance Indian history articles", "High-importance Indian history articles"],
+  "india-geography": ["Top-importance Indian geography articles", "High-importance Indian geography articles"],
+};
+const OFF_TOPIC = /^India at the |\b(Flight \d+|cricket|Olympics|Commonwealth Games|Asian Games|election|Lok Sabha|Rajya Sabha|Vidhan Sabha)\b/i;
+const POOL_CAT = { space: "space", history: "history", geography: "geography", "india-history": "history", "india-geography": "geography" };
 // Used only if the Vital list can't be fetched.
 const FALLBACK = {
   space: ["Pioneer 10", "New Horizons", "Halley's Comet", "Andromeda Galaxy", "Olympus Mons", "Europa (moon)", "Crab Nebula", "Kuiper belt", "Black hole", "Titan (moon)", "Great Red Spot", "Apollo 13"],
   history: ["Fall of Constantinople", "French Revolution", "Battle of Hastings", "Treaty of Westphalia", "Meiji Restoration", "Black Death", "Indus Valley Civilisation", "Partition of India", "Moon landing", "Industrial Revolution", "Byzantine Empire", "Columbian exchange"],
   geography: ["Mariana Trench", "Great Barrier Reef", "Atacama Desert", "Nile", "Lake Baikal", "Dead Sea", "Iguazu Falls", "Himalayas", "Grand Canyon", "Antarctica", "Ring of Fire", "Victoria Falls"],
+  "india-history": ["Indus Valley Civilisation", "Maurya Empire", "Ashoka", "Gupta Empire", "Chola dynasty", "Vijayanagara Empire", "Mughal Empire", "Maratha Confederacy", "Indian Rebellion of 1857", "Salt March", "Partition of India", "Constitution of India"],
+  "india-geography": ["Western Ghats", "Deccan Plateau", "Ganges", "Thar Desert", "Sundarbans", "Brahmaputra River", "Kanchenjunga", "Andaman and Nicobar Islands", "Chilika Lake", "Indo-Gangetic Plain", "Rann of Kutch", "Godavari River"],
 };
 const NASA_TERMS = ["Saturn", "Jupiter", "nebula", "galaxy", "Mars rover", "Apollo", "International Space Station", "comet", "Hubble", "Webb telescope", "aurora", "solar flare", "Pluto", "Cassini", "Voyager", "eclipse", "Moon", "spacewalk", "asteroid", "star cluster", "Earth from space", "Venus", "Mercury", "Gemini program", "space shuttle"];
 
@@ -199,7 +209,16 @@ async function vitalTitles(topic) {
   if (cached && Date.now() - cached.at < WEEK && cached.titles.length > 50) return cached.titles;
   const titles = [];
   try {
-    for (const page of VITAL[topic]) {
+    for (const cat of INDIA_CATS[topic] || []) {   // India pools: category members are talk pages
+      let cont = {};
+      for (let i = 0; i < 4; i++) {
+        const d = await getJSON(wikiQS({ action: "query", list: "categorymembers", cmtitle: "Category:" + cat, cmnamespace: "1", cmlimit: "max", ...cont }), { headers: WIKI_HEADERS });
+        for (const m of d.query.categorymembers || []) titles.push(m.title.replace(/^Talk:/, ""));
+        if (!d.continue) break;
+        cont = { cmcontinue: d.continue.cmcontinue };
+      }
+    }
+    for (const page of VITAL[topic] || []) {
       let cont = {};
       for (let i = 0; i < 12; i++) {               // each request returns up to 500 links
         const d = await getJSON(wikiQS({ action: "query", redirects: "1", prop: "links", plnamespace: "0", pllimit: "max", titles: page, ...cont }), { headers: WIKI_HEADERS });
@@ -209,7 +228,7 @@ async function vitalTitles(topic) {
       }
     }
   } catch (e) { if (cached) return cached.titles; }
-  const good = titles.filter(t => !/^(List|Lists|Outline|Index|Timeline|Glossary) of /.test(t) && !/^\d{1,4}s?( (BC|AD|BCE|CE))?$/.test(t));
+  const good = [...new Set(titles)].filter(t => !/^(List|Lists|Outline|Index|Timeline|Glossary) of /.test(t) && !/^\d{1,4}s?( (BC|AD|BCE|CE))?$/.test(t) && !OFF_TOPIC.test(t));
   if (good.length > 50) { store.set(key, { at: Date.now(), titles: good }); return good; }
   return FALLBACK[topic];
 }
@@ -226,7 +245,7 @@ async function wikiCards(topic, n) {
   for (const p of shuffle(d.query.pages || [])) {
     if (p.missing || !p.thumbnail || words(p.extract) < 35) { chosen.forEach(t => t === p.title && markSeen("wiki:" + t)); continue; }
     out.push({
-      id: "wiki:" + p.title, cat: topic, h: p.title, t: brief(p.extract),
+      id: "wiki:" + p.title, cat: POOL_CAT[topic], india: topic.startsWith("india"), h: p.title, t: brief(p.extract),
       fact: p.description ? p.description.charAt(0).toUpperCase() + p.description.slice(1) : "",
       img: p.thumbnail.source, alt: p.title, credit: "Wikimedia Commons (see article for licence)",
       source: ["Wikipedia", p.fullurl || "https://en.wikipedia.org/wiki/" + encodeURIComponent(p.title.replace(/ /g, "_"))],
@@ -298,6 +317,7 @@ const SOURCES = {
     if (!quakesShown) { quakesShown = true; s.push(quakeCards(1)); }
     return s;
   },
+  india: n => [wikiCards("india-history", Math.ceil(n / 2)), wikiCards("india-geography", Math.floor(n / 2))],
 };
 
 /* ---------- state and rendering ---------- */
@@ -320,7 +340,7 @@ function card(c, i) {
   }
   s.append(f);
   const b = el("div", "body");
-  const m = el("div", "meta"); m.append(el("span", "chip", c.cat));
+  const m = el("div", "meta"); m.append(el("span", "chip", c.india ? "India · " + c.cat : c.cat));
   if (c.fact) m.append(el("span", "fact", c.fact));
   if (c.live) m.append(el("span", "live", "Loaded live"));
   const src = el("div", "src");
@@ -336,7 +356,8 @@ function fromStatic(c) {
     source: c.off, more: [["Read more on Internet Archive", c.ar], ["Wikipedia", c.wiki]] };
 }
 
-const visible = () => items.filter(c => topic === "all" || c.cat === topic);
+const matches = c => topic === "all" || (topic === "india" ? c.india : c.cat === topic);
+const visible = () => items.filter(matches);
 function setCount(i, n) { count.textContent = String(i + 1).padStart(2, "0") + " / " + String(n).padStart(2, "0"); }
 
 function endPanel() {
@@ -395,9 +416,10 @@ function interleave(list, want) {
 
 // Fetch one batch of live cards for the current tab. Returns {cards, busy}; never touches the page.
 async function fetchBatch() {
-  const want = topic === "all" ? ["space", "history", "geography"] : [topic];
+  const srcs = topic === "all" ? ["space", "history", "geography"] : [topic];
+  const want = topic === "india" ? ["history", "geography"] : srcs;
   const per = topic === "all" ? PER_TOPIC : PER_SINGLE;
-  const results = await Promise.allSettled(want.flatMap(t => SOURCES[t](per)));
+  const results = await Promise.allSettled(srcs.flatMap(t => SOURCES[t](per)));
   const fresh = [], have = new Set(items.map(c => c.id));
   let busy = false;
   for (const r of results) {
@@ -427,7 +449,7 @@ async function loadMore() {
 
 for (const [k, label] of TOPICS) {
   const b = el("button", null, label); b.dataset.t = k; b.setAttribute("role", "tab");
-  b.onclick = () => { if (topic === k) return; topic = k; try { localStorage.setItem("oa-topic", k); } catch (e) {} render(); };
+  b.onclick = () => { if (topic === k) return; topic = k; try { localStorage.setItem("oa-topic", k); } catch (e) {} render(); if (visible().length < 3 && !refreshing) loadMore(); };
   tabs.append(b);
 }
 document.addEventListener("keydown", e => {
@@ -460,8 +482,8 @@ async function refresh() {
     const add = cards.filter(c => !items.some(x => x.id === c.id));
     if (!add.length) return;
     items.push(...add);
-    const start = visible().length - add.filter(c => topic === "all" || c.cat === topic).length;
-    endEl.before(...add.filter(c => topic === "all" || c.cat === topic).map((c, k) => card(c, start + k)));
+    const shown = add.filter(matches), start = visible().length - shown.length;
+    endEl.before(...shown.map((c, k) => card(c, start + k)));
     drawEnd("idle"); observe();
   });
   refreshing = false; refreshBtn.disabled = false;
