@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Orbit &amp; Atlas</title>
-<meta name="description" content="Short reads on space, history and geography, with more stories loaded live from NASA, USGS and Wikipedia.">
+<meta name="description" content="Short reads on space, history, geography and India, plus diaries, letters and essays by great writers.">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151a25" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,13 +12,13 @@
 <meta name="apple-mobile-web-app-title" content="Orbit & Atlas">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='14' fill='%233a49c4'/%3E%3Cellipse cx='32' cy='32' rx='28' ry='9' fill='none' stroke='%231c7656' stroke-width='4' transform='rotate(-25 32 32)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,650;1,6..72,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 /* Layout: one full-height column of snap-scrolling cards (image on top, short brief below), topic tabs pinned above.
    The last panel loads more cards live from public APIs. */
 :root {
   --bg: #eef0f5; --surface: #ffffff; --ink: #141824; --muted: #596174; --line: #dce0ea;
-  --space: #3a49c4; --history: #a3383c; --geo: #1c7656; --india: #b4570b; --chip-ink: #ffffff;
+  --space: #3a49c4; --history: #a3383c; --geo: #1c7656; --india: #b4570b; --writers: #7a3f98; --chip-ink: #ffffff;
   --display: "Newsreader", Georgia, "Times New Roman", serif;
   --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
@@ -26,7 +26,7 @@
 }
 @media (prefers-color-scheme: dark) { :root {
   --bg: #0b0e15; --surface: #151a25; --ink: #e8ebf3; --muted: #9aa2b6; --line: #262d3d;
-  --space: #8d9bff; --history: #ff8f8c; --geo: #62d3a8; --india: #f2a65a; --chip-ink: #0b0e15; color-scheme: dark } }
+  --space: #8d9bff; --history: #ff8f8c; --geo: #62d3a8; --india: #f2a65a; --writers: #c9a2ff; --chip-ink: #0b0e15; color-scheme: dark } }
 
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
@@ -47,7 +47,7 @@ nav button:focus-visible, a:focus-visible, .end button:focus-visible { outline: 
 .feed { flex: 1 1 auto; min-height: 0; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; scrollbar-width: none; }
 .feed::-webkit-scrollbar { display: none; }
 .card { height: 100%; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; border-bottom: 1px solid var(--line); }
-.space { --accent: var(--space); } .history { --accent: var(--history); } .geography { --accent: var(--geo); } nav.india { --accent: var(--india); }
+.space { --accent: var(--space); } .history { --accent: var(--history); } .geography { --accent: var(--geo); } nav.india { --accent: var(--india); } .writers { --accent: var(--writers); }
 figure { position: relative; margin: 0; flex: 0 0 40%; min-height: 0; overflow: hidden;
   background: linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--muted)) 35%, var(--surface)), color-mix(in srgb, var(--accent, var(--muted)) 10%, var(--surface))); }
 figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -75,6 +75,15 @@ figcaption { position: absolute; right: 6px; bottom: 6px; max-width: calc(100% -
 .end button:disabled { opacity: 0.6; cursor: default; }
 .spin { width: 22px; height: 22px; margin: 0 auto; border: 2px solid var(--line); border-top-color: var(--ink); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+/* Writers cards: text only, set like a page of a book. */
+.card.writers .body { padding-block: 22px 12px; gap: 12px; }
+.card.writers h2 { font-size: 1.5rem; }
+.work { margin: -6px 0 0; font: italic 400 1rem/1.4 var(--display); color: var(--muted); }
+.read { display: flex; flex-direction: column; gap: 0.9em; }
+.read p, .read blockquote { margin: 0; font: 400 1.1rem/1.62 var(--display); color: var(--ink); hyphens: auto; }
+.read blockquote { padding-left: 14px; border-left: 2px solid var(--accent); }
+.read .said { display: block; margin-top: 4px; font: 400 0.78rem/1.4 var(--body); color: var(--muted); }
+.read.quotes blockquote + blockquote { margin-top: 6px; }
 @media (prefers-reduced-motion: reduce) { .feed { scroll-behavior: auto; } .spin { animation-duration: 2.4s; } }
 @media (min-width: 560px) { .app { border-left: 1px solid var(--line); border-right: 1px solid var(--line); } }
 </style>
@@ -91,7 +100,7 @@ figcaption { position: absolute; right: 6px; bottom: 6px; max-width: calc(100% -
 <script>
 "use strict";
 /* ---------- settings ---------- */
-const TOPICS = [["all", "All"], ["space", "Space"], ["history", "History"], ["geography", "Geography"], ["india", "India"]];
+const TOPICS = [["all", "All"], ["space", "Space"], ["history", "History"], ["geography", "Geography"], ["india", "India"], ["writers", "Writers"]];
 const PER_TOPIC = 3;               // new cards per topic per "Load more" (All tab gets 3 of each)
 const PER_SINGLE = 6;              // new cards per "Load more" on a single-topic tab
 const WEEK = 7 * 24 * 3600 * 1000;
@@ -308,6 +317,99 @@ async function quakeCards(n) {
   return out;
 }
 
+// 5) Writers: diaries, letters and essays. Text only, no photos.
+//    a) Passages cut from public-domain books on Project Gutenberg (site/writers.json, built by tools/build_writers.py),
+//       plus short hand-written profiles of each writer.
+//    b) Wikiquote: sourced quotations, mainly for 20th-century writers whose books are still in copyright.
+//    c) The Marginalian (Maria Popova's site), through its public WordPress feed.
+const WIKIQUOTE_API = "https://en.wikiquote.org/w/api.php";
+const QUOTE_AUTHORS = ["Anaïs Nin", "Iris Murdoch", "Virginia Woolf", "Sylvia Plath", "Joan Didion", "Rainer Maria Rilke", "Mary Oliver",
+  "James Baldwin", "Franz Kafka", "Susan Sontag", "Annie Dillard", "Rebecca Solnit", "Ursula K. Le Guin", "Toni Morrison", "Simone Weil",
+  "Etty Hillesum", "Albert Camus", "Rabindranath Tagore", "Katherine Mansfield", "Anne Frank", "Mary Shelley", "Henry David Thoreau", "Emily Dickinson"];
+const QUOTE_STOP = /^(Misattributed|Disputed|Attributed|Quotes? about|About |Quotes from others|External links|See also|Sources|References|Notes)/i;
+let writersData = null;
+function loadWriters() { return writersData || (writersData = fetch("writers.json").then(r => r.json()).catch(e => { writersData = null; throw e; })); }
+const gutenberg = id => "https://www.gutenberg.org/ebooks/" + id;
+const wikiPage = name => "https://en.wikipedia.org/wiki/" + encodeURIComponent(name.replace(/ /g, "_"));
+
+async function libraryCards(n) {
+  const d = await loadWriters();
+  const out = [];
+  const prof = shuffle(d.profiles.filter(p => !seen.has("profile:" + p.id) && !items.some(c => c.id === "profile:" + p.id)))[0];
+  if (prof) out.push({
+    id: "profile:" + prof.id, cat: "writers", kind: "Writer", h: prof.author, work: prof.role + " · " + prof.life, paras: prof.text,
+    source: prof.links[0], more: prof.links.slice(1),
+  });
+  for (const p of shuffle(d.passages.filter(p => !seen.has(p.id) && !items.some(c => c.id === p.id)))) {
+    if (out.length >= n) break;
+    if (out.some(c => c.h === p.author)) continue;       // one passage per writer per batch
+    out.push({
+      id: p.id, cat: "writers", kind: p.kind, fact: p.year < 1000 ? "c. " + p.year : String(p.year), h: p.author,
+      work: p.work + (p.where && !p.work.includes(p.where) && !/^[ivxlc]+\.?$/i.test(p.where) && !p.where.startsWith(p.author) ? " · " + p.where.replace(/^[IVXLC]+\.?\s*[—-]\s*/i, "").replace(/\.$/, "") : ""), paras: p.text,
+      source: ["Project Gutenberg", gutenberg(p.gutenberg)],
+      more: [["Internet Archive", archive(p.author + " " + p.work.replace(/\(.*?\)|,? vol\..*$/gi, ""))], ["About " + p.author, wikiPage(p.author)]],
+    });
+  }
+  return out;
+}
+
+async function quoteCards(n) {
+  const out = [];
+  for (const author of shuffle(QUOTE_AUTHORS.slice()).slice(0, n)) {
+    const d = await getJSON(WIKIQUOTE_API + "?" + new URLSearchParams({ action: "parse", format: "json", formatversion: "2", origin: "*",
+      page: author, prop: "text", redirects: "1", disableeditsection: "1", disabletoc: "1" }), { headers: WIKI_HEADERS });
+    const doc = new DOMParser().parseFromString(d.parse.text, "text/html");
+    const root = doc.querySelector(".mw-parser-output") || doc.body;
+    const quotes = [];
+    for (const node of root.children) {
+      if (node.matches("h2, .mw-heading2") && QUOTE_STOP.test(node.textContent.trim())) break;
+      if (node.tagName !== "UL") continue;
+      for (const li of node.querySelectorAll(":scope > li")) {
+        const said = li.querySelector(":scope > ul > li");
+        const q = li.cloneNode(true); q.querySelectorAll("ul, sup, .reference").forEach(x => x.remove());
+        const text = q.textContent.replace(/\s+/g, " ").trim(), w = words(text);
+        if (w < 8 || w > 70) continue;
+        quotes.push({ text, said: said ? said.textContent.replace(/\s+/g, " ").trim().slice(0, 110) : "", bold: !!li.querySelector(":scope > b") });
+      }
+    }
+    const fresh = quotes.filter(q => !seen.has("wq:" + author + ":" + q.text.slice(0, 40)));
+    const chosen = shuffle(fresh.filter(q => q.bold)).concat(shuffle(fresh.filter(q => !q.bold))).slice(0, 3);
+    if (!chosen.length) continue;
+    out.push({
+      id: "wq:" + author + ":" + chosen[0].text.slice(0, 40), cat: "writers", kind: "In their words", h: author, work: "Quotations, with their sources",
+      quotes: chosen.map(q => [q.text, q.said]), source: ["Wikiquote", "https://en.wikiquote.org/wiki/" + encodeURIComponent(author.replace(/ /g, "_"))],
+      more: [["About " + author, wikiPage(author)]],
+    });
+  }
+  return out;
+}
+
+async function popovaCards(n) {
+  const page = 1 + Math.floor(Math.random() * 400);     // the archive goes back to 2006
+  const list = await getJSON("https://www.themarginalian.org/wp-json/wp/v2/posts?" + new URLSearchParams({ per_page: "3", page, _fields: "id,title,link,date,content" }));
+  const out = [];
+  for (const p of shuffle(list)) {
+    if (out.length >= n || seen.has("mg:" + p.id)) continue;
+    const doc = new DOMParser().parseFromString(p.content.rendered, "text/html");
+    const paras = []; let total = 0;
+    for (const node of doc.body.querySelectorAll("p, blockquote")) {
+      if (node.tagName === "P" && node.closest("blockquote")) continue;
+      const text = node.textContent.replace(/\s+/g, " ").trim(), w = words(text);
+      if (w < 12 || /donat|subscribe|newsletter|patreon/i.test(text)) continue;
+      if (total && total + w > 200) break;
+      paras.push(node.tagName === "BLOCKQUOTE" ? { q: text } : text); total += w;
+      if (total > 160) break;
+    }
+    if (total < 80) continue;
+    out.push({
+      id: "mg:" + p.id, cat: "writers", kind: "Essay", fact: fmtDate(new Date(p.date)), h: stripTags(p.title.rendered),
+      work: "Maria Popova · The Marginalian", paras, cont: true,
+      source: ["Read the full essay on The Marginalian", p.link], more: [["About Maria Popova", wikiPage("Maria Popova")]],
+    });
+  }
+  return out;
+}
+
 let quakesShown = false;
 const SOURCES = {
   space: n => [nasaCards(Math.ceil(n * 2 / 3)), wikiCards("space", Math.floor(n / 3))],
@@ -318,6 +420,7 @@ const SOURCES = {
     return s;
   },
   india: n => [wikiCards("india-history", Math.ceil(n / 2)), wikiCards("india-geography", Math.floor(n / 2))],
+  writers: n => [libraryCards(n - 2), quoteCards(1), popovaCards(1)],
 };
 
 /* ---------- state and rendering ---------- */
@@ -326,7 +429,25 @@ let topic = "all";
 try { const t = localStorage.getItem("oa-topic"); if (TOPICS.some(x => x[0] === t)) topic = t; } catch (e) {}
 let loading = false, endEl = null, io, nearEnd;
 
+// Writers cards: no photo, the whole passage on the card.
+function writerCard(c, i) {
+  const s = el("article", "card writers"); s.dataset.i = i;
+  const b = el("div", "body");
+  const m = el("div", "meta"); m.append(el("span", "chip", c.kind || "Writers"));
+  if (c.fact) m.append(el("span", "fact", c.fact));
+  const r = el("div", "read" + (c.quotes ? " quotes" : ""));
+  if (c.quotes) for (const [t, said] of c.quotes) { const q = el("blockquote", null, t); if (said) q.append(el("span", "said", said)); r.append(q); }
+  for (const p of c.paras || []) r.append(typeof p === "string" ? el("p", null, p) : el("blockquote", null, p.q));
+  if (c.cont) r.append(el("span", "said", "The essay continues on The Marginalian."));
+  const src = el("div", "src");
+  const r1 = el("div", "row"); r1.append(el("b", null, "Source"), link(c.source[1], c.source[0])); src.append(r1);
+  const r2 = el("div", "row"); for (const [label, href] of c.more || []) r2.append(link(href, label)); if (r2.childNodes.length) src.append(r2);
+  b.append(m, el("h2", null, c.h), el("p", "work", c.work), r, src); s.append(b);
+  return s;
+}
+
 function card(c, i) {
+  if (c.cat === "writers") return writerCard(c, i);
   const s = el("article", "card " + c.cat); s.dataset.i = i;
   const f = el("figure");
   if (c.img) {
@@ -356,7 +477,7 @@ function fromStatic(c) {
     source: c.off, more: [["Read more on Internet Archive", c.ar], ["Wikipedia", c.wiki]] };
 }
 
-const matches = c => topic === "all" || (topic === "india" ? c.india : c.cat === topic);
+const matches = c => topic === "all" ? c.cat !== "writers" : topic === "india" ? c.india : c.cat === topic;
 const visible = () => items.filter(matches);
 function setCount(i, n) { count.textContent = String(i + 1).padStart(2, "0") + " / " + String(n).padStart(2, "0"); }
 
@@ -365,15 +486,16 @@ function endPanel() {
   endEl = end; drawEnd("idle");
   return end;
 }
+const sourceNote = () => topic === "writers" ? "From Project Gutenberg, Wikiquote and The Marginalian" : "From NASA, USGS and Wikipedia";
 function drawEnd(state, msg) {
   if (!endEl) return;
   const n = visible().length;
   const kids = [];
   if (state === "loading") {
-    kids.push(el("div", "spin"), el("h2", null, "Finding more stories…"), el("p", "note", "From NASA, USGS and Wikipedia"));
+    kids.push(el("div", "spin"), el("h2", null, "Finding more stories…"), el("p", "note", sourceNote()));
   } else {
     kids.push(el("h2", null, state === "error" ? "Couldn't load more" : "You've read " + n + " stories"));
-    kids.push(el("p", "note", state === "error" ? msg : "Load more fetches new cards live from NASA, USGS and Wikipedia. It doesn't use AI or any tokens."));
+    kids.push(el("p", "note", state === "error" ? msg : "Load more fetches new cards from " + sourceNote().replace(/^From /, "") + ". It doesn't use AI or any tokens."));
     const a = el("div", "actions");
     const more = el("button", "primary", state === "error" ? "Try again" : "Load more"); more.onclick = () => loadMore();
     const top = el("button", null, "Back to top"); top.onclick = () => feed.scrollTo({ top: 0 });
@@ -424,7 +546,7 @@ async function fetchBatch() {
   let busy = false;
   for (const r of results) {
     if (r.status === "rejected") { if (String(r.reason && r.reason.message) === "busy") busy = true; continue; }
-    for (const c of r.value) if (c && c.h && c.t && !have.has(c.id)) { have.add(c.id); c.live = true; fresh.push(c); }
+    for (const c of r.value) if (c && c.h && (c.t || c.paras || c.quotes) && !have.has(c.id)) { have.add(c.id); c.live = true; fresh.push(c); }
   }
   return { cards: interleave(shuffle(fresh), want), busy };
 }
