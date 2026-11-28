@@ -18,7 +18,7 @@
    The last panel loads more cards live from public APIs. */
 :root {
   --bg: #eef0f5; --surface: #ffffff; --ink: #141824; --muted: #596174; --line: #dce0ea;
-  --space: #3a49c4; --history: #a3383c; --geo: #1c7656; --india: #b4570b; --writers: #7a3f98; --chip-ink: #ffffff;
+  --space: #3a49c4; --history: #a3383c; --geo: #1c7656; --india: #b4570b; --writers: #7a3f98; --love: #c2185b; --chip-ink: #ffffff;
   --display: "Newsreader", Georgia, "Times New Roman", serif;
   --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
@@ -26,7 +26,7 @@
 }
 @media (prefers-color-scheme: dark) { :root {
   --bg: #0b0e15; --surface: #151a25; --ink: #e8ebf3; --muted: #9aa2b6; --line: #262d3d;
-  --space: #8d9bff; --history: #ff8f8c; --geo: #62d3a8; --india: #f2a65a; --writers: #c9a2ff; --chip-ink: #0b0e15; color-scheme: dark } }
+  --space: #8d9bff; --history: #ff8f8c; --geo: #62d3a8; --india: #f2a65a; --writers: #c9a2ff; --love: #ff7aa8; --chip-ink: #0b0e15; color-scheme: dark } }
 
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
@@ -47,7 +47,7 @@ nav button:focus-visible, a:focus-visible, .end button:focus-visible { outline: 
 .feed { flex: 1 1 auto; min-height: 0; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; scrollbar-width: none; }
 .feed::-webkit-scrollbar { display: none; }
 .card { height: 100%; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; border-bottom: 1px solid var(--line); }
-.space { --accent: var(--space); } .history { --accent: var(--history); } .geography { --accent: var(--geo); } nav.india { --accent: var(--india); } .writers { --accent: var(--writers); }
+.space { --accent: var(--space); } .history { --accent: var(--history); } .geography { --accent: var(--geo); } nav.india { --accent: var(--india); } .writers { --accent: var(--writers); } nav.saved { --accent: var(--love); }
 figure { position: relative; margin: 0; flex: 0 0 40%; min-height: 0; overflow: hidden;
   background: linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--muted)) 35%, var(--surface)), color-mix(in srgb, var(--accent, var(--muted)) 10%, var(--surface))); }
 figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -84,6 +84,12 @@ figcaption { position: absolute; right: 6px; bottom: 6px; max-width: calc(100% -
 .read blockquote { padding-left: 14px; border-left: 2px solid var(--accent); }
 .read .said { display: block; margin-top: 4px; font: 400 0.78rem/1.4 var(--body); color: var(--muted); }
 .read.quotes blockquote + blockquote { margin-top: 6px; }
+/* Love button: saves the card to the Saved tab on this device. */
+.love { margin-left: auto; border: 0; background: none; color: var(--muted); font: 400 1.35rem/1 var(--body); min-width: 40px; min-height: 34px; margin-block: -6px; margin-right: -8px; border-radius: 6px; cursor: pointer; }
+.love[aria-pressed="true"] { color: var(--love); }
+.love:focus-visible { outline: 2px solid var(--love); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) { .love[aria-pressed="true"] { animation: pop 0.25s ease-out; } }
+@keyframes pop { 50% { transform: scale(1.3); } }
 @media (prefers-reduced-motion: reduce) { .feed { scroll-behavior: auto; } .spin { animation-duration: 2.4s; } }
 @media (min-width: 560px) { .app { border-left: 1px solid var(--line); border-right: 1px solid var(--line); } }
 </style>
@@ -100,7 +106,7 @@ figcaption { position: absolute; right: 6px; bottom: 6px; max-width: calc(100% -
 <script>
 "use strict";
 /* ---------- settings ---------- */
-const TOPICS = [["all", "All"], ["space", "Space"], ["history", "History"], ["geography", "Geography"], ["india", "India"], ["writers", "Writers"]];
+const TOPICS = [["all", "All"], ["space", "Space"], ["history", "History"], ["geography", "Geography"], ["india", "India"], ["writers", "Writers"], ["saved", "♥ Saved"]];
 const PER_TOPIC = 3;               // new cards per topic per "Load more" (All tab gets 3 of each)
 const PER_SINGLE = 6;              // new cards per "Load more" on a single-topic tab
 const WEEK = 7 * 24 * 3600 * 1000;
@@ -423,6 +429,19 @@ const SOURCES = {
   writers: n => [libraryCards(n - 2), quoteCards(1), popovaCards(1)],
 };
 
+/* ---------- favourites: whole cards kept in localStorage, so they still show after the live feed moves on ---------- */
+let saved = store.get("oa-saved", {});
+const isSaved = c => Object.prototype.hasOwnProperty.call(saved, c.id);
+function heart(c) {
+  const b = el("button", "love");
+  const draw = () => { const on = isSaved(c); b.textContent = on ? "♥" : "♡"; b.setAttribute("aria-pressed", on); b.setAttribute("aria-label", on ? "Remove from saved" : "Save to favourites"); b.title = on ? "Saved" : "Save"; };
+  b.onclick = () => {
+    if (isSaved(c)) delete saved[c.id]; else saved[c.id] = { ...c, savedAt: Date.now() };
+    store.set("oa-saved", saved); draw();
+  };
+  draw(); return b;
+}
+
 /* ---------- state and rendering ---------- */
 let items = [];                       // hand-written cards + everything loaded live this visit
 let topic = "all";
@@ -435,6 +454,7 @@ function writerCard(c, i) {
   const b = el("div", "body");
   const m = el("div", "meta"); m.append(el("span", "chip", c.kind || "Writers"));
   if (c.fact) m.append(el("span", "fact", c.fact));
+  m.append(heart(c));
   const r = el("div", "read" + (c.quotes ? " quotes" : ""));
   if (c.quotes) for (const [t, said] of c.quotes) { const q = el("blockquote", null, t); if (said) q.append(el("span", "said", said)); r.append(q); }
   for (const p of c.paras || []) r.append(typeof p === "string" ? el("p", null, p) : el("blockquote", null, p.q));
@@ -464,6 +484,7 @@ function card(c, i) {
   const m = el("div", "meta"); m.append(el("span", "chip", c.india ? "India · " + c.cat : c.cat));
   if (c.fact) m.append(el("span", "fact", c.fact));
   if (c.live) m.append(el("span", "live", "Loaded live"));
+  m.append(heart(c));
   const src = el("div", "src");
   const r1 = el("div", "row"); r1.append(el("b", null, c.live ? "Source" : "Official source"), link(c.source[1], c.source[0])); src.append(r1);
   const r2 = el("div", "row"); for (const [label, href] of c.more || []) r2.append(link(href, label)); if (r2.childNodes.length) src.append(r2);
@@ -477,8 +498,9 @@ function fromStatic(c) {
     source: c.off, more: [["Read more on Internet Archive", c.ar], ["Wikipedia", c.wiki]] };
 }
 
-const matches = c => topic === "all" ? c.cat !== "writers" : topic === "india" ? c.india : c.cat === topic;
-const visible = () => items.filter(matches);
+let savedView = [];                   // the Saved tab's list, fixed while it's open so an un-save can be undone
+const matches = c => topic === "saved" ? false : topic === "all" ? c.cat !== "writers" : topic === "india" ? c.india : c.cat === topic;
+const visible = () => topic === "saved" ? savedView : items.filter(matches);
 function setCount(i, n) { count.textContent = String(i + 1).padStart(2, "0") + " / " + String(n).padStart(2, "0"); }
 
 function endPanel() {
@@ -491,7 +513,11 @@ function drawEnd(state, msg) {
   if (!endEl) return;
   const n = visible().length;
   const kids = [];
-  if (state === "loading") {
+  if (topic === "saved") {
+    kids.push(el("h2", null, n ? n + " saved " + (n === 1 ? "story" : "stories") : "Nothing saved yet"));
+    kids.push(el("p", "note", "Tap ♡ on any card to keep it here. Saved cards stay in this browser on this device."));
+    if (n) { const a = el("div", "actions"), top = el("button", null, "Back to top"); top.onclick = () => feed.scrollTo({ top: 0 }); a.append(top); kids.push(a); }
+  } else if (state === "loading") {
     kids.push(el("div", "spin"), el("h2", null, "Finding more stories…"), el("p", "note", sourceNote()));
   } else {
     kids.push(el("h2", null, state === "error" ? "Couldn't load more" : "You've read " + n + " stories"));
@@ -520,12 +546,13 @@ function observe() {
 }
 
 function render() {
+  if (topic === "saved") savedView = Object.values(saved).sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0));
   const list = visible();
   feed.replaceChildren(...list.map((c, i) => card(c, i)), endPanel());
   for (const b of tabs.children) b.setAttribute("aria-selected", b.dataset.t === topic);
   tabs.className = topic === "all" ? "" : topic;
   feed.scrollTo({ top: 0 });
-  if (list.length) setCount(0, list.length);
+  if (list.length) setCount(0, list.length); else count.textContent = "";
   observe();
 }
 
@@ -538,6 +565,7 @@ function interleave(list, want) {
 
 // Fetch one batch of live cards for the current tab. Returns {cards, busy}; never touches the page.
 async function fetchBatch() {
+  if (topic === "saved") return { cards: [], busy: false };
   const srcs = topic === "all" ? ["space", "history", "geography"] : [topic];
   const want = topic === "india" ? ["history", "geography"] : srcs;
   const per = topic === "all" ? PER_TOPIC : PER_SINGLE;
@@ -552,7 +580,7 @@ async function fetchBatch() {
 }
 
 async function loadMore() {
-  if (loading) return;
+  if (loading || topic === "saved") return;
   loading = true; drawEnd("loading");
   const { cards: ordered, busy } = await fetchBatch();
   loading = false;
