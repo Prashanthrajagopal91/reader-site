@@ -325,7 +325,7 @@ async function quakeCards(n) {
 const WIKIQUOTE_API = "https://en.wikiquote.org/w/api.php";
 const QUOTE_AUTHORS = ["Anaïs Nin", "Iris Murdoch", "Virginia Woolf", "Sylvia Plath", "Joan Didion", "Rainer Maria Rilke", "Mary Oliver",
   "James Baldwin", "Franz Kafka", "Susan Sontag", "Annie Dillard", "Rebecca Solnit", "Ursula K. Le Guin", "Toni Morrison", "Simone Weil",
-  "Etty Hillesum", "Albert Camus", "Rabindranath Tagore", "Katherine Mansfield", "Anne Frank", "Mary Shelley", "Henry David Thoreau", "Emily Dickinson", "Fyodor Dostoevsky"];
+  "Etty Hillesum", "Albert Camus", "Rabindranath Tagore", "Katherine Mansfield", "Anne Frank", "Mary Shelley", "Henry David Thoreau", "Emily Dickinson", "Fyodor Dostoevsky", "Leo Tolstoy", "Anton Chekhov"];
 const QUOTE_STOP = /^(Misattributed|Disputed|Attributed|Quotes? about|About |Quotes from others|External links|See also|Sources|References|Notes)/i;
 let writersData = null;
 function loadWriters() { return writersData || (writersData = fetch("writers.json").then(r => r.json()).catch(e => { writersData = null; throw e; })); }
